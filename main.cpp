@@ -5,6 +5,7 @@ bool test_authenticate(User*);
 bool test_new_name(User*);
 bool test_new_password(User*);
 bool test_new_phone(User*);
+bool test_new_email(User*);
 void print(User*);
 
 int main() {
@@ -14,9 +15,11 @@ int main() {
 
     //if (test_authenticate(user)){ std::cout << "Passed!\n"; }
     //if (test_new_name(user)) { std::cout << "Passed!\n"; }
-    //if (test_new_password(user)) {std::cout << "Passed!\n"; }
-    if (test_new_phone(user)) {std::cout<< "Passed!\n"; }
+    //if (test_new_password(user)) { std::cout << "Passed!\n"; }
+    //if (test_new_phone(user)) { std::cout<< "Passed!\n"; }
+    //if (test_new_email(user)) { std::cout << "Passed!\n"; }
 
+    
     delete user;
     return 0;
 }
@@ -37,6 +40,9 @@ bool test_new_phone(User* u){
     return u->update_user_phone();
 }
 
+bool test_new_email(User* u){
+    return u->update_user_email();
+}
 void print(User* u){
     std::cout << *u << std::endl;
 }
