@@ -15,6 +15,7 @@
 #define MAX_NAME_LENGTH 64
 #define MAX_PASSWORD_LENGTH 16
 #define MIN_PASSWORD_LENGTH 8
+#define PHONE_NUMBER_LENGTH 13
 
 /******************************************************************************************************************
  *                                                USER CLASS                                                      *

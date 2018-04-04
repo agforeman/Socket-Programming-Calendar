@@ -53,15 +53,27 @@ const bool User::authenticate_user(const std::string& nme, const std::string& pw
 }
 
 const bool User::update_user_name() {
+    bool valid;
+    std::string newName;
     // ASK FOR NEW USER NAME
-    // TEST IT IS VALID
-    // UPDATE USER NAME
-    // RETURN TRUE
+    do {
+        std::cout << "New name: ";
+        getline(std::cin, newName);
+        // TEST IT IS VALID
+        valid = check_new_name_valid(newName);
+        if(!valid){
+            std::cout << "Sorry invalid input" << std::endl;
+        }
+    } while(!valid);
+
+    this->__name = newName;
+    std::cout << "User Name Updated" << std::endl;
+    return true;
 }
 
 const bool User::check_new_name_valid(const std::string& newName) const {
-    enum States {State1, State2, State3};
-    States state = State1;
+    enum States {State0, State1, State2, State3};
+    States state = State0;
     // WE will enforce a 64 length
     // Check if alphanumeric possible hyphen alphanumeric
     // check that only 1 word
@@ -73,13 +85,92 @@ const bool User::check_new_name_valid(const std::string& newName) const {
     // TEST IF STRING IS ALPHANUM AND '-" if so accept
     // While Alphanumeric accept if '-' state 2
     for (std::string::iterator it = copy.begin(); it!=copy.end(); ++it){
-        isalnum(atoi((const char*)*it);
+        //isalnum returns NON-0(int) if true else returns 0 if false
+        int intCastedChar = static_cast<int>(*it);
+        int notAlNum = isalnum(intCastedChar);
+        if(notAlNum == 0 && *it != '-') {
+            return false;
+        }
+        else if (notAlNum != 0) {
+            if(state == State0) state = State1;
+            else if (state == State2) state = State3;
+        }
+        else if (*it == '-'){
+            if (state == State1) state = State2;
+            else return false; }
     }
-        isalnum(atoi((char*)*it));
-    std::cout << '\n';
-    // reject unless next symbol is alphanumeric state 3
-    // Accept if remainder of string is alphanumeric
+    if(state == State1 || state == State3) return true;
+    else return false;
+}
 
+const bool User::update_user_password(){
+    bool valid;
+    std::string newPassword;
+
+    do {
+        std::cout << "New password: ";
+        getline(std::cin, newPassword);
+        // TEST IT IS VALID
+        valid = check_new_password_valid(newPassword);
+        if(!valid){
+            std::cout << "Sorry invalid input" << std::endl;
+        }
+    } while(!valid);
+
+    this->__password = newPassword;
+    std::cout << "User Password Updated to " << this->__password << std::endl;
+    return true;
+}
+
+const bool User::check_new_password_valid(const std::string &newPassword) const {
+    if(newPassword.length() > MAX_PASSWORD_LENGTH || newPassword.length() < MIN_PASSWORD_LENGTH) return false;
+    std::string copy = newPassword;
+    for (std::string::iterator it = copy.begin(); it != copy.end(); ++it){
+        if(isalnum(static_cast<int>(*it)) == 0) return false;
+    }
+    return true;
+}
+
+const bool User::update_user_phone(){
+    bool valid;
+    std::string newPhone;
+
+    do {
+        std::cout << "New phone: ";
+        getline(std::cin, newPhone);
+        // TEST IT IS VALID
+        valid = check_new_phone_valid(newPhone);
+        if(!valid){
+            std::cout << "Sorry invalid input" << std::endl;
+        }
+    } while(!valid);
+    this->__phone = newPhone;
+    std::cout << "User Phone Updated" << std::endl;
+    return true;
+}
+
+const bool User::check_new_phone_valid(const std::string &newPhone) const {
+    if(newPhone.length() != PHONE_NUMBER_LENGTH) return false;
+
+    std::string copy = newPhone;
+
+    if(copy[0] != '(' || copy[4] != ')' || copy[8] != '-') return false;
+
+    copy.erase (copy.begin());
+    copy.erase (copy.begin()+3);
+    copy.erase(copy.begin()+6);
+
+    for(std::string::iterator it = copy.begin(); it != copy.end(); ++it){
+        if(isdigit(static_cast<int>(*it)) == 0) return false;
+    }
+    return true;
+}
+
+const bool User::update_user_email() {
+
+}
+
+const bool User::check_new_email_valid(const std::string &newEmail) const {
 
 }
 
@@ -92,4 +183,3 @@ std::ostream& operator<<( std::ostream& output, const User& user) {
 
     return output;
 }
-
