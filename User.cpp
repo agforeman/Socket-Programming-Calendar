@@ -72,8 +72,8 @@ const bool User::update_user_name() {
 }
 
 const bool User::check_new_name_valid(const std::string& newName) const {
-    enum States {State0, State1, State2, State3};
-    States state = State0;
+
+    User::States state = State0;
     // WE will enforce a 64 length
     // Check if alphanumeric possible hyphen alphanumeric
     // check that only 1 word
@@ -99,8 +99,7 @@ const bool User::check_new_name_valid(const std::string& newName) const {
             if (state == State1) state = State2;
             else return false; }
     }
-    if(state == State1 || state == State3) return true;
-    else return false;
+    return state == State1 || state == State3;
 }
 
 const bool User::update_user_password(){
@@ -167,11 +166,112 @@ const bool User::check_new_phone_valid(const std::string &newPhone) const {
 }
 
 const bool User::update_user_email() {
+    bool valid;
+    std::string newEmail;
+    // ASK FOR NEW USER NAME
+    do {
+        std::cout << "New email: ";
+        getline(std::cin, newEmail);
+        // TEST IT IS VALID
+        valid = check_new_email_valid(newEmail);
+        if(!valid){
+            std::cout << "Sorry invalid input" << std::endl;
+        }
+    } while(!valid);
 
-}
+    this->__email = newEmail;
+    std::cout << "User Email Updated" << std::endl;
+    return true;
+    }
 
 const bool User::check_new_email_valid(const std::string &newEmail) const {
+    bool nullstr = true;
+    bool processingDomain = false;
+    int substrLen = 0;
+    User::States state = State0;
 
+    if(newEmail.length() > MAX_EMAIL_LENGTH || newEmail.length() < MIN_EMAIL_LENGTH) {
+        std::cout << "New email too short or too long! Try a different email." << std::endl;
+        return false;
+    }
+
+    std::string copy = newEmail;
+    for(std::string::iterator it = copy.begin(); it != copy.end(); ++it){
+        int intCastedChar = static_cast<int>(*it);
+        int notAlNum = isalnum(intCastedChar);
+        if (state == State0){
+            if (nullstr) {
+                if (notAlNum == 0) {
+                    return false;
+                } else {
+                    nullstr = false;
+                }
+            } else {
+                if (notAlNum != 0){
+                    // Continue
+                } else if (*it == '.') {
+                    state = State1;
+                    nullstr = true;
+                } else if (*it == '@') {
+                    state = State2;
+                    nullstr = true;
+                } else {
+                    return false;
+                }
+            }
+        } else if (state == State1) {
+            if (nullstr) {
+                if (notAlNum == 0) {
+                    return false;
+                } else {
+                    nullstr = false;
+                }
+            } else {
+                if (notAlNum != 0) {
+                    //Continue
+                } else if (*it == '@') {
+                    state = State2;
+                    processingDomain = true;
+                    nullstr = true;
+                } else {
+                    return false;
+                }
+            }
+        } else if (state == State2) {
+            if (nullstr) {
+                if (notAlNum == 0){
+                    return false;
+                } else {
+                    nullstr = false;
+                }
+            } else {
+                if (notAlNum != 0){
+                    //Continue
+                } else if (*it == '.') {
+                    state = processingDomain ? State3 : State2;
+                    nullstr = true;
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            if (nullstr){
+                if (notAlNum == 0) {
+                    return false;
+                } else {
+                    nullstr = false;
+                    ++substrLen;
+                }
+            } else {
+                if (notAlNum == 0) {
+                    return false;
+                } else {
+                    ++substrLen;
+                }
+            }
+        }
+    }
+    return substrLen == 3;
 }
 
 std::ostream& operator<<( std::ostream& output, const User& user) {

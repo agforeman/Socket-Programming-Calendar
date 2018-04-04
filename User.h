@@ -9,13 +9,16 @@
 #include <cctype>
 #include <cstdlib>
 
-//#include <openssl/aes.h>
 
 #define MAX_ATTEMPTS 3
 #define MAX_NAME_LENGTH 64
 #define MAX_PASSWORD_LENGTH 16
 #define MIN_PASSWORD_LENGTH 8
 #define PHONE_NUMBER_LENGTH 13
+#define MAX_EMAIL_LENGTH 128
+#define MIN_EMAIL_LENGTH 9
+
+
 
 /******************************************************************************************************************
  *                                                USER CLASS                                                      *
@@ -37,6 +40,8 @@
 
 class User {
 private:
+    enum States {State0, State1, State2, State3};
+
     std::string __name;
     std::string __password;
     std::string __phone;
