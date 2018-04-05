@@ -6,18 +6,19 @@
 
 
 User::User(){
-    User::new_user(&(this->__name), &(this->__password), &(this->__phone), &(this->__email));
+    bool success = false;
+    do {
+        success = User::new_user(&(this->__name), &(this->__password), &(this->__phone), &(this->__email));
+    } while (!success);
 }
 
-void User::new_user(std::string* nme, std::string* pwd, std::string* phn, std::string* eml){
-    std::cout << "Name: ";
-    getline(std::cin, *nme);
-    std::cout << "\nPassword: ";
-    getline(std::cin, *pwd);
-    std::cout << "\nPhone: ";
-    getline(std::cin, *phn);
-    std::cout << "\nEmail: ";
-    getline(std::cin, *eml);
+const bool User::new_user(std::string* nme, std::string* pwd, std::string* phn, std::string* eml){
+    bool success = true;
+    success = success && update_user_name();
+    success = success && update_user_password();
+    success = success && update_user_phone();
+    success = success && update_user_email();
+    return success;
 }
 
 // GIVES 3 CHANCES, ASKS FOR USER NAME AND PASS IF THEY ARE GOOD THEN RETURN TRUE;

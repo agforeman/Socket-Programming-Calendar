@@ -48,14 +48,13 @@ private:
     std::string __email;
     long __UUID;
 
+    const bool new_user(std::string*, std::string*, std::string*, std::string*);
 
 public:
     /* Constructor's for the User Class */
     User();
     User(std::string name, std::string password, std::string phone, std::string email) :
               __name(name), __password(password), __phone(phone), __email(email) {}
-
-    void new_user(std::string*, std::string*, std::string*, std::string*);
 
 
     /* Getters and Setters */

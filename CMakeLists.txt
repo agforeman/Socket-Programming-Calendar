@@ -3,4 +3,4 @@ project(Test)
 
 set(CMAKE_CXX_STANDARD 98)
 
-add_executable(Test main.cpp User.cpp User.h)
+add_executable(Test main.cpp User.cpp User.h Appointment.cpp Appointment.h)

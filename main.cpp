@@ -1,5 +1,6 @@
 #include <iostream>
 #include "User.h"
+#include "Appointment.h"
 
 using namespace std;
 
@@ -11,16 +12,17 @@ bool test_new_email(User*);
 void print(User*);
 
 int main() {
-    User* user = new User("Alex", "1234", "(303)246-7650", "alex.foreman@yahoo.com");
+    //User* user = new User("Alex", "1234", "(303)246-7650", "alex.foreman@yahoo.com");
+    //User* user = new User();
 
-    print(user);
+    Appointment* appointment = new Appointment();
 
     //if (test_authenticate(user)){ std::cout << "Passed!\n"; }
     //if (test_new_name(user)) { std::cout << "Passed!\n"; }
     //if (test_new_password(user)) { std::cout << "Passed!\n"; }
     //if (test_new_phone(user)) { std::cout<< "Passed!\n"; }
     //if (test_new_email(user)) { std::cout << "Passed!\n"; }
-
+/*
     time_t now = time(0);
 
     cout << "Number of sec since January 1,1970:" << now << endl;
@@ -34,9 +36,10 @@ int main() {
     cout << "Time: "<< 1 + ltm->tm_hour << ":";
     cout << 1 + ltm->tm_min << ":";
     cout << 1 + ltm->tm_sec << endl;
+*/
 
-
-    delete user;
+    //delete user;
+    delete appointment;
     return 0;
 }
 
