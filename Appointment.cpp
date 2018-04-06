@@ -39,7 +39,36 @@ const bool Appointment::new_appointment(std::string* title, datetime& start, dat
 }
 
 const bool Appointment::update_appointment_date(const char mode, apmtDate& date) {
+    if (mode != 'S' && mode != 'E') return false;
+    bool valid = false;
+    std::string day;
+    std::string month;
+    std::string year;
+    std::pair<std::string, std::string> monyr;
+    do {
+        std::cout << "Month: ";
+        getline(std::cin, month);
+        valid = check_date_valid(&month, 'M');
+        if(!valid) continue;
+        monyr.first = month;
 
+        std::cout << "Year: ";
+        getline(std::cin, year);
+        valid = check_date_valid(&year, 'Y');
+        if(!valid) continue;
+        monyr.second = year;
+
+        std::cout << "Day: ";
+        getline(std::cin, day);
+        valid = check_date_valid(&day, 'D', &monyr);
+    } while (!valid);
+    size_t numericDay = (std::size_t)atoi(day.c_str());
+    size_t numericMonth = (std::size_t)atoi(month.c_str());
+    size_t numericYear = (std::size_t)atoi(year.c_str());
+    date.__day = numericDay;
+    date.__month = numericMonth;
+    date.__year = numericYear;
+    return true;
 }
 
 const bool Appointment::update_appointment_time(const char mode, apmtTime& time) {
@@ -99,8 +128,33 @@ const bool Appointment::check_title_valid(const std::string* title) const {
     return title->length() >= APPOINTMENT_TITLE_MIN_LENGTH && title->length() <= APPOINTMENT_TITLE_MAX_LENGTH;
 }
 
-const bool Appointment::check_date_valid() const {
+const bool Appointment::check_date_valid(const std::string* value, const char mode) const {
+    if (mode != 'D' && mode != 'M' && mode != 'Y') return false;
+    if (!is_numeric(value->c_str())) return false;
+    if (mode == 'Y') {
+        return value->length() == 4 && is_numeric(value->c_str());
+    } else if (mode == 'M') {
+        std::size_t month = (std::size_t)atoi(value->c_str());
+        return month > 0 && month <= 12;
+    } else {
+        return false;
+    }
+}
 
+const bool Appointment::check_date_valid(const std::string* value, const char mode, std::pair<std::string, std::string>* mmyyyy) const{
+    if (!is_numeric(value->c_str())) return false;
+    std::size_t day = (std::size_t)atoi(value->c_str());
+    bool isLeap = is_leap_year(&mmyyyy->second);
+    std::size_t month = (std::size_t)atoi((mmyyyy->first).c_str());
+
+    if(month % 2 == 1){
+        return day == 31;
+    } else if(month == 2) {
+        if(isLeap) return day == 29;
+        else return day == 28;
+    } else {
+        return day == 30;
+    }
 }
 
 const bool Appointment::check_time_valid(const std::string& testString, const char mode) const {
@@ -119,20 +173,31 @@ const bool Appointment::check_time_valid(const std::string& testString, const ch
     }
 }
 
-const bool Appointment::is_numeric(const char *string) const
-{
+const bool Appointment::is_numeric(const char *string) const {
     std::size_t sizeOfString = strlen(string);
     int iteration = 0;
     bool isNumeric = true;
 
-    while(iteration < sizeOfString)
-    {
-        if(!isdigit(string[iteration]))
-        {
+    while (iteration < sizeOfString) {
+        if (!isdigit(string[iteration])) {
             isNumeric = false;
             break;
         }
         iteration++;
     }
     return isNumeric;
+}
+
+const bool Appointment::is_leap_year(const std::string* year) const {
+    std::size_t numericYear = (std::size_t)atoi(year->c_str());
+    if(numericYear % 4 == 0) {
+        if(numericYear % 100 == 0){
+            if(numericYear % 400 == 0){
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+    return false;
 }

@@ -9,6 +9,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <vector>
 
 #define APPOINTMENT_TITLE_MAX_LENGTH 32
 #define APPOINTMENT_TITLE_MIN_LENGTH 8
@@ -46,14 +47,16 @@ private:
 public:
     Appointment();
 
-    const bool update_appointment_date(const char, apmtDate&);
-    const bool update_appointment_time(const char, apmtTime&);
+    const bool update_appointment_date(char, apmtDate&);
+    const bool update_appointment_time(char, apmtTime&);
     const bool update_appointment_title(std::string*);
     const bool update_appointment_location(std::string*);
     const bool update_appointment_contents(std::string*);
     const bool check_title_valid(const std::string*) const;
-    const bool check_date_valid() const;
-    const bool check_time_valid(const std::string&, const char) const;
+    const bool check_date_valid(const std::string*, char) const;
+    const bool check_date_valid(const std::string*, char, std::pair<std::string, std::string>*) const;
+    const bool check_time_valid(const std::string&, char) const;
+    const bool is_leap_year(const std::string*) const;
 
     const bool is_numeric(const char*) const;
 

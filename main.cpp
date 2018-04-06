@@ -15,7 +15,7 @@ int main() {
     //User* user = new User("Alex", "1234", "(303)246-7650", "alex.foreman@yahoo.com");
     //User* user = new User();
 
-    Appointment* appointment = new Appointment();
+    //Appointment* appointment = new Appointment();
 
     //if (test_authenticate(user)){ std::cout << "Passed!\n"; }
     //if (test_new_name(user)) { std::cout << "Passed!\n"; }
@@ -39,7 +39,7 @@ int main() {
 */
 
     //delete user;
-    delete appointment;
+    //delete appointment;
     return 0;
 }
 
